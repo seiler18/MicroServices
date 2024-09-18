@@ -3,6 +3,7 @@ package cl.jesusseiler.store.shopping.entity;
 
 import lombok.Data;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
@@ -11,7 +12,8 @@ import jakarta.validation.constraints.Positive;
 
 @Entity
 @Data
-@Table(name = "tbl_invoce_items")
+@Table(name = "tbl_invoice_items")
+@JsonIgnoreProperties({"invoice"})
 public class InvoiceItem  {
 
     @Id
@@ -19,11 +21,15 @@ public class InvoiceItem  {
     private Long id;
     @Positive(message = "El stock debe ser mayor que cero")
     private Double quantity;
+    @Positive(message = "El precio debe ser mayor que cero")
     private Double  price;
 
     @Column(name = "product_id")
     private Long productId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "invoice_id", nullable = false)  // Relación con Invoice
+    private Invoice invoice;
 
     @Transient
     private Double subTotal;
