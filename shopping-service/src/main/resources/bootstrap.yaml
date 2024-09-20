@@ -1,0 +1,12 @@
+spring.config.import: "configserver:http://localhost:8086"
+
+spring:
+  application:
+    name: shopping-service
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8086
+      username: seiler18
+      password: seiler18
+
