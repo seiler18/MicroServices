@@ -11,16 +11,8 @@ spring:
           username: ${GIT_USERNAME}
           password: ${GIT_PASSWORD}
           
-  security:
-    user:
-      name: seiler18
-      password: seiler18
+  # security:
+  #   user:
+  #     name: seiler18
+  #     password: seiler18
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: always
