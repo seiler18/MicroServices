@@ -14,6 +14,3 @@ spring:
     user:
       name: seiler18
       password: seiler18
-
-
-debug: true
