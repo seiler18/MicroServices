@@ -9,7 +9,7 @@ spring:
             server:
                 git:
                     uri: https://github.com/seiler18/MicroServices.git
-                    search-paths: config-data
+                    searchPaths: config-data
                     username: ${GIT_USERNAME}
                     password: ${GIT_PASSWORD}
     security:
