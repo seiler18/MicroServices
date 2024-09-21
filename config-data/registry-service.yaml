@@ -1,12 +1,12 @@
 # a registry-service with erukaserver and erukaregistry
 server:
-    waitTimeInMsWhenSyncEmpty: 0    #wait time for subsequent sync
-    port: 8087
-    eureka:
-    instance:
-      hostname: localhost
-    client:
-      registerWithEureka: false
-      fetchRegistry: false
-      serviceUrl:
-        defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+  port: 8761
+
+eureka:
+  instance:
+    hostname: localhost  # Nombre de host del servidor Eureka
+  client:
+    registerWithEureka: false  # Deshabilita el registro del servidor Eureka como cliente
+    fetchRegistry: false       # Deshabilita la obtención del registro desde otros servidores Eureka
+  server:
+    enableSelfPreservation: false  # Opcional: Deshabilita la auto-preservación para facilitar el desarrollo
