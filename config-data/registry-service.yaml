@@ -1,7 +1,8 @@
 # a registry-service with erukaserver and erukaregistry
 server:
-  port: 8761
-  eureka:
+    waitTimeInMsWhenSyncEmpty: 0    #wait time for subsequent sync
+    port: 8087
+    eureka:
     instance:
       hostname: localhost
     client:
