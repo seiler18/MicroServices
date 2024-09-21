@@ -1,0 +1,11 @@
+# a registry-service with erukaserver and erukaregistry
+server:
+  port: 8087
+  eureka:
+    instance:
+      hostname: localhost
+    client:
+      registerWithEureka: false
+      fetchRegistry: false
+      serviceUrl:
+        defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
