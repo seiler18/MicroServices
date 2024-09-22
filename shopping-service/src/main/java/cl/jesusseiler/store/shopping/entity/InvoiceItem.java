@@ -28,10 +28,6 @@ public class InvoiceItem  {
     @Column(name = "product_id")
     private Long productId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "invoice_id", nullable = false)  // Relación con Invoice
-    private Invoice invoice;
-
     @Transient
     private Double subTotal;
 
