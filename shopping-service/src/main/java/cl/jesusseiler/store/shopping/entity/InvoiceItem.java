@@ -5,6 +5,7 @@ import lombok.Data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import cl.jesusseiler.store.shopping.model.Product;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 
@@ -33,6 +34,9 @@ public class InvoiceItem  {
 
     @Transient
     private Double subTotal;
+
+    @Transient
+    private Product product;
 
 
     public Double getSubTotal(){

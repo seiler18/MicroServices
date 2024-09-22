@@ -2,26 +2,36 @@
 server:
   port: 8083
 
-# Datasource configuration
+# To See H2 Console in Browser:
+# http://localhost:8091/h2-console
+# Enabling H2 Console
 spring:
-  datasource:
-    url: jdbc:h2:mem:productDB
-    driverClassName: org.h2.Driver
-    username: sa
-    password: ''
-
-# H2 Console configuration
   h2:
     console:
       enabled: true
-      path: /h2-console
+  # ===============================
+  # DB
+  # ===============================
+  datasource:
+    url: jdbc:h2:mem:productDB;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    platform: h2
+    username: sa
+    password:
 
-# JPA configuration
+  # ===============================
+  # JPA / HIBERNATE
+  # ===============================
   jpa:
-    hibernate:
-      ddl-auto: none
     show-sql: true
-    open-in-view: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        show_sql: true
+        use_sql_comments: false
+        format_sql: false
 
 # Conexion a Eureka
 eureka:

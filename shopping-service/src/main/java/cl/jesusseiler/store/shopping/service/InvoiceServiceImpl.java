@@ -1,7 +1,12 @@
 package cl.jesusseiler.store.shopping.service;
 
 
+import cl.jesusseiler.store.shopping.client.CustomerClient;
+import cl.jesusseiler.store.shopping.client.ProductClient;
 import cl.jesusseiler.store.shopping.entity.Invoice;
+import cl.jesusseiler.store.shopping.entity.InvoiceItem;
+import cl.jesusseiler.store.shopping.model.Customer;
+import cl.jesusseiler.store.shopping.model.Product;
 import cl.jesusseiler.store.shopping.repository.InvoiceItemsRepository;
 import cl.jesusseiler.store.shopping.repository.InvoiceRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -20,6 +26,13 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Autowired
     InvoiceItemsRepository invoiceItemsRepository;
+
+    @Autowired
+    CustomerClient customerClient;
+
+    @Autowired
+    ProductClient productClient;
+
 
     @Override
     public List<Invoice> findInvoiceAll() {
@@ -34,7 +47,13 @@ public class InvoiceServiceImpl implements InvoiceService {
             return  invoiceDB;
         }
         invoice.setState("CREATED");
-        return invoiceRepository.save(invoice);
+
+        invoiceDB = invoiceRepository.save(invoice);
+
+        invoiceDB.getItems().forEach( invoiceItem -> {
+            productClient.updateStock( invoiceItem.getProductId(), invoiceItem.getQuantity() * -1);
+        });
+        return invoiceDB;
     }
 
 
@@ -65,6 +84,17 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public Invoice getInvoice(Long id) {
-        return invoiceRepository.findById(id).orElse(null);
+        Invoice invoice = invoiceRepository.findById(id).orElse(null);
+        if (invoice != null){
+            Customer customer = customerClient.getCustomer(invoice.getCustomerId()).getBody();
+            invoice.setCustomer(customer);
+            List<InvoiceItem> listItem = invoice.getItems().stream().map( InvoiceItem -> {
+                Product product = productClient.getProduct(InvoiceItem.getProductId()).getBody();
+                InvoiceItem.setProduct(product);
+                return InvoiceItem;
+            }).collect(Collectors.toList());
+            invoice.setItems(listItem);
+        }
+        return invoice;
     }
 }
