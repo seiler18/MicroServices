@@ -41,3 +41,50 @@ eureka:
   instance:
     preferIpAddress: true
     instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+# Resilience4j Configuration (Feign integration)
+resilience4j:
+  circuitbreaker:
+    instances:
+      customer-service: # Define el nombre del cliente Feign con Resilience4j
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 3
+        event-consumer-buffer-size: 10
+      product-service: # Configuración para product-service
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 3
+        event-consumer-buffer-size: 10
+
+# Feign Configuration (sin Hystrix, con Resilience4j)
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+
+# Actuator, Prometheus, and Resilience4j Metrics Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus # Exponiendo todos los endpoints de Actuator
+  metrics:
+    enable:
+      all: true
+    export:
+      prometheus:
+        enabled: true # Exponiendo métricas para Prometheus
+  endpoint:
+    health:
+      show-details: always
+# Grafana Config (General Monitoring)
+# Grafana recogerá datos de Prometheus, por lo tanto, no requiere configuraciones adicionales en este archivo.
